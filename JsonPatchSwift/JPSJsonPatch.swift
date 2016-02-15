@@ -23,16 +23,25 @@ func == (lhs: JPSJsonPatch, rhs: JPSJsonPatch) -> Bool {
     return true
 }
 
+/// Representation of a JSON Patch
 public struct JPSJsonPatch {
-    
-    public enum JPSJsonPatchInitialisationError: ErrorType {
-        case InvalidJsonFormat(message: String?)
-        case InvalidPatchFormat(message: String?)
-        case UnexpectedError
-    }
-    
+
     let operations: [JPSOperation]
     
+    /**
+        Initializes a new `JPSJsonPatch` based on a given String representation.
+
+        - Parameter patch: A String representing one or many JSON Patch operations.
+            e.g. (1) { "op": "add", "path": "/", "value": "foo" }
+            or (> 1)
+                [ { "op": "add", "path": "/", "value": "foo" },
+                { "op": "test", "path": "/", "value": "foo } ]
+
+        - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
+            notify failed initialization.
+
+        - Returns: a `JPSJsonPatch` representation of the given JSON Patch String
+    */
     public init(_ patch: String) throws {
         
         // Get the JSON
@@ -63,7 +72,20 @@ public struct JPSJsonPatch {
         }
         
     }
-    
+
+    /**
+     Possible errors thrown by the init function.
+
+     - InvalidJsonFormat: The given String is not a valid JSON.
+     - InvalidPatchFormat: The given Patch is invalid (e.g. missing mandatory parameters).
+        See error message for details.
+     - UnexpectedError: Something unexpected happened.
+     */
+    public enum JPSJsonPatchInitialisationError: ErrorType {
+        case InvalidJsonFormat(message: String?)
+        case InvalidPatchFormat(message: String?)
+        case UnexpectedError
+    }
 }
 
 
