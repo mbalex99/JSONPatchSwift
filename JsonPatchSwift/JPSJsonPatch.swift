@@ -43,14 +43,19 @@ public struct JPSJsonPatch {
         - Returns: a `JPSJsonPatch` representation of the given JSON Patch String
     */
     public init(_ patch: String) throws {
-        
-        // Get the JSON
+
+        // Convert the String to NSData        
         guard let data = patch.dataUsingEncoding(NSUTF8StringEncoding) else {
             throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchEncoding)
         }
-        
-        let json = JSON(data: data)
-        
+
+        // Parse the JSON
+        var jsonError: NSError?
+        let json = JSON(data: data, options: .AllowFragments, error: &jsonError)
+        if let actualError = jsonError {
+            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: actualError.description)
+        }
+
         // Check if there is an array of a dictionary as root element. Both are valid JSON patch documents.
         if json.type == .Dictionary {
             self.operations = [try JPSJsonPatch.extractOperationFromJson(json)]

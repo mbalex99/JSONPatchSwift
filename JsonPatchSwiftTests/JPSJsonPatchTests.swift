@@ -55,5 +55,4 @@ class JPSJsonPatchTests: XCTestCase {
         let expectedJson = JSON(data: "{ \"bla\" : \"blub\" }".dataUsingEncoding(NSUTF8StringEncoding)!)
         XCTAssertEqual(resultingJson, expectedJson)
     }
-    
 }

@@ -56,11 +56,14 @@ class JPSDocumentStructureTests: XCTestCase {
         do {
             _ = try JPSJsonPatch("!#€%&/()*^*_:;;:;_poawolwasnndaw")
             XCTFail("Unreachable code. Should have raised an error.")
-        } catch {
+        } catch JPSJsonPatch.JPSJsonPatchInitialisationError.InvalidJsonFormat(let message) {
             // Expected behaviour.
+            XCTAssertNotNil(message)
+        } catch {
+            XCTFail("Unexpected error.")
         }
     }
-    
+
     func testJsonPatchWithDictionaryAsRootElementForOperationTest() {
         let jsonPatch = try! JPSJsonPatch("{ \"op\": \"test\", \"path\": \"/a/b/c\", \"value\": \"foo\" }")
         XCTAssertNotNil(jsonPatch)
