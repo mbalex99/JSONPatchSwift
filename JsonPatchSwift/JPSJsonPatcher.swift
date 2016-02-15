@@ -10,8 +10,20 @@
 
 import SwiftyJSON
 
+/// RFC 6902 compliant JSONPatch implementation.
 public struct JPSJsonPatcher {
-    
+
+    /**
+        Applies a given `JPSJsonPatch` to a `JSON`.
+
+        - Parameter jsonPatch: the jsonPatch to apply
+        - Parameter json: the json to apply the patch to
+
+        - Throws: can throw any error from `JPSJsonPatcher.JPSJsonPatcherApplyError` to
+            notify about failed operations.
+
+        - Returns: A new `JSON` containing the given `JSON` with the patch applied.
+    */
     public static func applyPatch(jsonPatch: JPSJsonPatch, toJson json: JSON) throws -> JSON {
         var tempJson = json
         for operation in jsonPatch.operations {
@@ -26,20 +38,27 @@ public struct JPSJsonPatcher {
         }
         return tempJson
     }
-    
+
+    /**
+        Possible errors thrown by the applyPatch function.
+     
+        - ValidationError: `test` operation did not succeed. At least one tested parameter does
+            not match the expected result.
+        - ArrayIndexOutOfBounds: tried to add an element to an array position > array size + 1.
+            See: http://tools.ietf.org/html/rfc6902#section-4.1
+        - InvalidJson: invalid `JSON` provided.
+     */
+    public enum JPSJsonPatcherApplyError: ErrorType {
+        case ValidationError(message: String?)
+        case ArrayIndexOutOfBounds
+        case InvalidJson
+    }
 }
 
 
 // MARK: - Private functions
 
 extension JPSJsonPatcher {
-    
-    public enum JPSJsonPatcherApplyError: ErrorType {
-        case ValidationError(message: String?)
-        case ArrayIndexOutOfBounds
-        case InvalidJson
-    }
-    
     private static func add(operation: JPSOperation, toJson json: JSON) throws -> JSON {
         
         guard 0 < operation.pointer.pointerValue.count else {
