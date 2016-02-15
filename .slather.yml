@@ -1,0 +1,7 @@
+coverage_service: coveralls
+xcodeproj: JSONPatchSwift.xcodeproj
+source_directory: JSONPatchSwift 
+ignore:
+  - JSONPatchSwiftTests/*
+  - Pods/*
+
