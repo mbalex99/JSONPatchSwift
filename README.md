@@ -1,4 +1,4 @@
-# JSON Patch (RFC 6902) in Swift
+# JSON Patch (RFC 6902) in Swift [![Build Status](https://travis-ci.org/EXXETA/JSONPatchSwift.svg?branch=master)](https://travis-ci.org/EXXETA/JSONPatchSwift) [![Coverage Status](https://coveralls.io/repos/github/EXXETA/JSONPatchSwift/badge.svg?branch=master)](https://coveralls.io/github/EXXETA/JSONPatchSwift?branch=master)
 
 JSONPatchSwift is an implementation of JSONPatch (RFC 6902) in pure Swift.
 
