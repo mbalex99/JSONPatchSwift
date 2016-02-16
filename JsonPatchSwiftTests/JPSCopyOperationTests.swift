@@ -33,7 +33,15 @@ class JPSCopyOperationTests: XCTestCase {
         let expectedJson = JSON(data: " { \"foo\" : [1, 2, 3, 4], \"bar\" : [1, 2, 3, 4]}".dataUsingEncoding(NSUTF8StringEncoding)!)
         XCTAssertEqual(resultingJson, expectedJson)
     }
-
+    
+    func testIfCopyArrayOfObjectsReturnsExpectedValue() {
+        let json = JSON(data: " { \"foo\" : [{\"foo\": \"bar\"}], \"bar\" : {} } ".dataUsingEncoding(NSUTF8StringEncoding)!)
+        let jsonPatch = try! JPSJsonPatch("{ \"op\": \"copy\", \"path\": \"/bar\", \"from\": \"/foo/0\" }")
+        let resultingJson = try! JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+        let expectedJson = JSON(data: " { \"foo\" : [{\"foo\": \"bar\"}], \"bar\" : {\"foo\": \"bar\"}}".dataUsingEncoding(NSUTF8StringEncoding)!)
+        XCTAssertEqual(resultingJson, expectedJson)
+    }
+    
     func testIfMissingParameterReturnsError() {
         do {
             let result = try JPSJsonPatch("{ \"op\": \"copy\", \"path\": \"/bar\"}") // from parameter missing
