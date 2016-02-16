@@ -43,7 +43,7 @@ let resultingJson = try? JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
 
 ### Supported Operations
 
-The framework supports all operations described by RFC 6902. Until we (or you? - see "contributing") find the time to add a documentation for each operation, we kindly ask to use our intensive test suite to find examples:
+The framework supports all operations described by RFC 6902. Until we (or you? - see "contributing") find the time to add a documentation for each operation, we kindly ask to use our extensive test suite to find examples:
 
 - add operation: [JPSAddOperationTests.swift](https://github.com/EXXETA/JSONPatchSwift/blob/master/JsonPatchSwiftTests/JPSAddOperationTests.swift)
 - copy operation: [JPSCopyOperationTests.swift](https://github.com/EXXETA/JSONPatchSwift/blob/master/JsonPatchSwiftTests/JPSCopyOperationTests.swift)
