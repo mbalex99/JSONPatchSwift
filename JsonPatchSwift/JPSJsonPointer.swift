@@ -10,12 +10,20 @@
 
 import SwiftyJSON
 
+/**
+ Possible errors thrown by the applyPatch function.
+ 
+ - ValueDoesNotContainDelimiter: JSON pointer values are delimited by a delimiter character, see https://tools.ietf.org/html/rfc6901#page-2.
+ - NonEmptyPointerDoesNotStartWithDelimiter: A JSON pointer must start with a delimiter character, see https://tools.ietf.org/html/rfc6901#page-2.
+ - ContainsEmptyReferenceToken: Every reference token in a JSON pointer must not be empty, see https://tools.ietf.org/html/rfc6901#page-2.
+ */
 public enum JPSJsonPointerError: ErrorType {
     case ValueDoesNotContainDelimiter
     case NonEmptyPointerDoesNotStartWithDelimiter
     case ContainsEmptyReferenceToken
 }
 
+/// RFC 6901 compliant JavaScript Object Notation (JSON) Pointer implementation.
 public struct JPSJsonPointer {
     
     let rawValue: String
@@ -25,6 +33,15 @@ public struct JPSJsonPointer {
 
 extension JPSJsonPointer {
 
+    /**
+     Initializes a new `JPSJsonPointer` based on a given String representation.
+     
+     - Parameter rawValue: A String representing a valid JSON pointer, see https://tools.ietf.org/html/rfc6901.
+     
+     - Throws: can throw any error from `JPSJsonPointer.JPSJsonPointerError` to notify failed initialization.
+     
+     - Returns: a `JPSJsonPointer` representation of the given JSON pointer string.
+     */
     public init(rawValue: String) throws {
         
         guard rawValue.isEmpty || rawValue.containsString(JPSConstants.JsonPointer.Delimiter) else {
