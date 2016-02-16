@@ -1,10 +1,10 @@
 # JSON Patch (RFC 6902) in Swift [![Build Status](https://travis-ci.org/EXXETA/JSONPatchSwift.svg?branch=master)](https://travis-ci.org/EXXETA/JSONPatchSwift) [![Coverage Status](https://coveralls.io/repos/github/EXXETA/JSONPatchSwift/badge.svg?branch=master)](https://coveralls.io/github/EXXETA/JSONPatchSwift?branch=master)
 
-JSONPatchSwift is an implementation of JSONPatch (RFC 6902) in pure Swift.
+JSONPatchSwift is an implementation of JSONPatch (RFC 6902) in pure Swift. It uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) for JSON handling.
 
 ## Installation
 
-###CocoaPods (iOS 9.0+, OS X 10.10+)
+### CocoaPods (iOS 9.0+, OS X 10.10+)
 You can use [CocoaPods](http://cocoapods.org/) to install `JSONPatchSwift`by adding it to your `Podfile`:
 ```ruby
 platform :ios, '9.0'
@@ -14,19 +14,28 @@ target 'MyApp' do
 	pod 'JSONPatchSwift', :git => 'https://github.com/EXXETA/JSONPatchSwift.git'
 end
 ```
+
 Note that this requires CocoaPods version 36, and your iOS deployment target to be at least 9.0:
 
 ## Usage
 
-###Initialization
+### Initialization
 ```swift
 import JSONPatchSwift
 ```
+
+Using a String:
 ```swift
 let jsonPatch = try? JPSJsonPatch("{ \"op\": \"add\", \"path\": \"/baz\", \"value\": \"qux\" }")
 ```
 
-###Using it on a JSON (using the framework [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON))
+Or using a SwiftyJSON object:
+```swift
+let json = JSON(data: " { \"op\": \"add\", \"path\": \"/baz\", \"value\": \"qux\" } ".dataUsingEncoding(NSUTF8StringEncoding)!)
+let jsonPatch = try? JPSJsonPatch(json)
+```
+
+### Apply it on a JSON
 ```swift
 let json = JSON(data: " { \"foo\" : \"bar\" } ".dataUsingEncoding(NSUTF8StringEncoding)!)
 let resultingJson = try? JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
@@ -48,7 +57,8 @@ let resultingJson = try? JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
 
 ## History
 
-v1.0 - initial release
+- v1.1 - fixed a packaging problem
+- v1.0 - initial release
 
 ## Credits
 
