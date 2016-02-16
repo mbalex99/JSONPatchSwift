@@ -14,7 +14,6 @@ public enum JPSJsonPointerError: ErrorType {
     case ValueDoesNotContainDelimiter
     case NonEmptyPointerDoesNotStartWithDelimiter
     case ContainsEmptyReferenceToken
-    case EvaluationFailed
 }
 
 public struct JPSJsonPointer {
