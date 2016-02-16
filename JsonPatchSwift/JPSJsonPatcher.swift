@@ -71,9 +71,6 @@ extension JPSJsonPatcher {
             if var jsonAsDictionary = traversedJson.dictionaryObject, let key = pointer.pointerValue.first as? String {
                 jsonAsDictionary[key] = operation.value.object
                 newJson.object = jsonAsDictionary
-            } else if var jsonAsDictionary = traversedJson.dictionaryObject, let index = pointer.pointerValue.first as? Int {
-                jsonAsDictionary[String(index)] = operation.value.object
-                newJson.object = jsonAsDictionary
             } else if var jsonAsArray = traversedJson.arrayObject, let indexString = pointer.pointerValue.first as? String, let index = Int(indexString) {
                 guard index <= jsonAsArray.count else {
                     throw JPSJsonPatcherApplyError.ArrayIndexOutOfBounds
@@ -84,7 +81,7 @@ extension JPSJsonPatcher {
             return newJson
         }
     }
-    
+
     private static func remove(operation: JPSOperation, toJson json: JSON) throws -> JSON {
         return try JPSJsonPatcher.applyOperation(json, pointer: operation.pointer) {
             (traversedJson: JSON, pointer: JPSJsonPointer) in
@@ -100,7 +97,7 @@ extension JPSJsonPatcher {
             return newJson
         }
     }
-    
+
     private static func replace(operation: JPSOperation, toJson json: JSON) throws -> JSON {
         return try JPSJsonPatcher.applyOperation(json, pointer: operation.pointer) {
             (traversedJson: JSON, pointer: JPSJsonPointer) in
