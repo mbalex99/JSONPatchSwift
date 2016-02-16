@@ -57,34 +57,3 @@ extension JPSJsonPointer {
         // swiftlint:enable force_try
     }
 }
-
-extension JPSJsonPointer {
-
-    static func identifySubJsonForPointer(pointer: JPSJsonPointer, inJson json: JSON) throws -> JSON {
-        
-        guard !pointer.rawValue.isEmpty else {
-            return json
-        }
-        
-        var tempJson = json
-        for i in 0..<pointer.pointerValue.count {
-            if tempJson.type == .Array {
-                guard let pointerValuePart = pointer.pointerValue[i] as? String else {
-                    continue
-                }
-                if JPSConstants.JsonPointer.EndOfArrayMarker == pointerValuePart {
-                    tempJson = tempJson.arrayValue.last!
-                } else if let value = Int(pointerValuePart) {
-                    tempJson = tempJson[value]
-                }
-            } else {
-                tempJson = tempJson[pointer.pointerValue[i]]
-            }
-        }
-        if tempJson == nil {
-            throw JPSJsonPointerError.EvaluationFailed
-        }
-        return tempJson
-    }
-    
-}
