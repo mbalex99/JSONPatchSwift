@@ -80,9 +80,7 @@ public struct JPSJsonPatch {
      */
     public init(_ patch: String) throws {
         // Convert the String to NSData
-        guard let data = patch.dataUsingEncoding(NSUTF8StringEncoding) else {
-            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchEncoding)
-        }
+        let data = patch.dataUsingEncoding(NSUTF8StringEncoding)!
         
         // Parse the JSON
         var jsonError: NSError?
