@@ -55,4 +55,10 @@ class JPSJsonPatchTests: XCTestCase {
         let expectedJson = JSON(data: "{ \"bla\" : \"blub\" }".dataUsingEncoding(NSUTF8StringEncoding)!)
         XCTAssertEqual(resultingJson, expectedJson)
     }
+
+    func testInitWithSwiftyJSON() {
+        let jsonPatchString = try! JPSJsonPatch("[{ \"op\": \"test\", \"path\": \"/a/b/c\", \"value\": \"foo\" }]")
+        let jsonPatchSwifty = try! JPSJsonPatch(JSON(data: " [{ \"op\": \"test\", \"path\": \"/a/b/c\", \"value\": \"foo\" }] ".dataUsingEncoding(NSUTF8StringEncoding)!))
+        XCTAssertTrue(jsonPatchString == jsonPatchSwifty)
+    }
 }

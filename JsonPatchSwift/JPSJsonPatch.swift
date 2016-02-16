@@ -27,46 +27,33 @@ func == (lhs: JPSJsonPatch, rhs: JPSJsonPatch) -> Bool {
 public struct JPSJsonPatch {
 
     let operations: [JPSOperation]
-    
+
     /**
-        Initializes a new `JPSJsonPatch` based on a given String representation.
+     Initializes a new `JPSJsonPatch` based on a given SwiftyJSON representation.
 
-        - Parameter patch: A String representing one or many JSON Patch operations.
-            e.g. (1) { "op": "add", "path": "/", "value": "foo" }
-            or (> 1)
-                [ { "op": "add", "path": "/", "value": "foo" },
-                { "op": "test", "path": "/", "value": "foo } ]
+     - Parameter _: A String representing one or many JSON Patch operations.
+        e.g. (1) JSON({ "op": "add", "path": "/", "value": "foo" })
+        or (> 1)
+        JSON([ { "op": "add", "path": "/", "value": "foo" },
+        { "op": "test", "path": "/", "value": "foo } ])
 
-        - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
-            notify failed initialization.
+     - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
+        notify failed initialization.
 
-        - Returns: a `JPSJsonPatch` representation of the given JSON Patch String
+     - Returns: a `JPSJsonPatch` representation of the given SwiftJSON object
     */
-    public init(_ patch: String) throws {
-
-        // Convert the String to NSData        
-        guard let data = patch.dataUsingEncoding(NSUTF8StringEncoding) else {
-            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchEncoding)
-        }
-
-        // Parse the JSON
-        var jsonError: NSError?
-        let json = JSON(data: data, options: .AllowFragments, error: &jsonError)
-        if let actualError = jsonError {
-            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: actualError.description)
-        }
-
+    public init(_ patch: JSON) throws {
         // Check if there is an array of a dictionary as root element. Both are valid JSON patch documents.
-        if json.type == .Dictionary {
-            self.operations = [try JPSJsonPatch.extractOperationFromJson(json)]
+        if patch.type == .Dictionary {
+            self.operations = [try JPSJsonPatch.extractOperationFromJson(patch)]
             
-        } else if json.type == .Array {
-            guard 0 < json.count else {
+        } else if patch.type == .Array {
+            guard 0 < patch.count else {
                 throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchWithEmptyError)
             }
             var operationArray = [JPSOperation]()
-            for i in 0..<json.count {
-                let operation = json[i]
+            for i in 0..<patch.count {
+                let operation = patch[i]
                 operationArray.append(try JPSJsonPatch.extractOperationFromJson(operation))
             }
             self.operations = operationArray
@@ -75,7 +62,36 @@ public struct JPSJsonPatch {
             // All other types are not a valid JSON Patch Operation.
             throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.InvalidRootElement)
         }
+    }
+
+    /**
+     Initializes a new `JPSJsonPatch` based on a given String representation.
+
+     - Parameter _: A String representing one or many JSON Patch operations.
+        e.g. (1) { "op": "add", "path": "/", "value": "foo" }
+        or (> 1)
+        [ { "op": "add", "path": "/", "value": "foo" },
+        { "op": "test", "path": "/", "value": "foo } ]
+
+     - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
+        notify failed initialization.
+
+     - Returns: a `JPSJsonPatch` representation of the given JSON Patch String
+     */
+    public init(_ patch: String) throws {
+        // Convert the String to NSData
+        guard let data = patch.dataUsingEncoding(NSUTF8StringEncoding) else {
+            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchEncoding)
+        }
         
+        // Parse the JSON
+        var jsonError: NSError?
+        let json = JSON(data: data, options: .AllowFragments, error: &jsonError)
+        if let actualError = jsonError {
+            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: actualError.description)
+        }
+
+        try self.init(json)
     }
 
     /**
