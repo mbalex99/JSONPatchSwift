@@ -67,16 +67,15 @@ public struct JPSJsonPatch {
     /**
      Initializes a new `JPSJsonPatch` based on a given String representation.
 
-     - Parameter _: A String representing one or many JSON Patch operations.
+     - parameter _: A String representing one or many JSON Patch operations.
         e.g. (1) { "op": "add", "path": "/", "value": "foo" }
         or (> 1)
         [ { "op": "add", "path": "/", "value": "foo" },
         { "op": "test", "path": "/", "value": "foo } ]
 
-     - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
-        notify failed initialization.
+     - throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to notify failed initialization.
 
-     - Returns: a `JPSJsonPatch` representation of the given JSON Patch String
+     - returns: a `JPSJsonPatch` representation of the given JSON Patch String.
      */
     public init(_ patch: String) throws {
         // Convert the String to NSData
@@ -92,18 +91,12 @@ public struct JPSJsonPatch {
         try self.init(json)
     }
 
-    /**
-     Possible errors thrown by the init function.
-
-     - InvalidJsonFormat: The given String is not a valid JSON.
-     - InvalidPatchFormat: The given Patch is invalid (e.g. missing mandatory parameters).
-        See error message for details.
-     - UnexpectedError: Something unexpected happened.
-     */
+    /// Possible errors thrown by the init function.
     public enum JPSJsonPatchInitialisationError: ErrorType {
+        /** InvalidJsonFormat: The given String is not a valid JSON. */
         case InvalidJsonFormat(message: String?)
+        /** InvalidPatchFormat: The given Patch is invalid (e.g. missing mandatory parameters). See error message for details. */
         case InvalidPatchFormat(message: String?)
-        case UnexpectedError
     }
 }
 

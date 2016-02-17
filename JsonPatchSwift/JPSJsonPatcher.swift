@@ -39,18 +39,13 @@ public struct JPSJsonPatcher {
         return tempJson
     }
 
-    /**
-        Possible errors thrown by the applyPatch function.
-     
-        - ValidationError: `test` operation did not succeed. At least one tested parameter does
-            not match the expected result.
-        - ArrayIndexOutOfBounds: tried to add an element to an array position > array size + 1.
-            See: http://tools.ietf.org/html/rfc6902#section-4.1
-        - InvalidJson: invalid `JSON` provided.
-     */
+    /// Possible errors thrown by the applyPatch function.
     public enum JPSJsonPatcherApplyError: ErrorType {
+        /** ValidationError: `test` operation did not succeed. At least one tested parameter does not match the expected result. */
         case ValidationError(message: String?)
+        /** ArrayIndexOutOfBounds: tried to add an element to an array position > array size + 1. See: http://tools.ietf.org/html/rfc6902#section-4.1 */
         case ArrayIndexOutOfBounds
+        /** InvalidJson: invalid `JSON` provided. */
         case InvalidJson
     }
 }
