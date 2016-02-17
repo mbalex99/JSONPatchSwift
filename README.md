@@ -68,6 +68,7 @@ The framework supports all operations described by RFC 6902. Until we (or you? -
 
 ## History
 
+- v1.2 - upgrade to 100% documented and 100% tested
 - v1.1 - fixed a packaging problem
 - v1.0 - initial release
 
