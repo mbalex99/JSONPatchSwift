@@ -2,6 +2,7 @@
 
 JSONPatchSwift is an implementation of JSONPatch (RFC 6902) in pure Swift. It uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) for JSON handling.
 
+
 ## Installation
 
 ### CocoaPods (iOS 9.0+, OS X 10.10+)
